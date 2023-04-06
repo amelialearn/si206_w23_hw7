@@ -78,14 +78,15 @@ def make_players_table(data, cur, conn):
 
 def nationality_search(countries, cur, conn):
     lst = []
-    conn = sqlite3.connect(countries)
-    cur = conn.cursor()
-    for row in cur:
-        cur.execute("SELECT players FROM countries")
-        tup = (name, position_id, nationality)
+    for country in countries:
+        name = cur.execute("SELECT name FROM Players WHERE nationality = ?", (country))
+        position_id = cur.execute("SELECT position_id FROM Players WHERE nationality = ?", (country))
+        #nationality = cur.execute("SELECT nationality FROM Players")
+        tup = (name, position_id, country)
         lst.append(tup)
     conn.commit()
     cur.close()
+    return lst
 
 ## [TASK 3]: 10 points
 # finish the function birthyear_nationality_search
@@ -104,7 +105,16 @@ def nationality_search(countries, cur, conn):
 
 
 def birthyear_nationality_search(age, country, cur, conn):
-    pass
+    lst = []
+    #players = cur.execute("SELECT name FROM Players WHERE nationality = ? AND birthyear < ?", (country, (2023 - age)))
+    name = cur.execute("SELECT name FROM Players WHERE nationality = ? AND birthyear < ?", (country, (2023 - age)))
+    birthyear = cur.execute("SELECT birthyear FROM Players WHERE nationality = ? AND birthyear < ?", (country, (2023 - age)))
+    tup = (name, country, birthyear)
+    lst.append(tup)
+
+    conn.commit()
+    cur.close()
+    return lst
 
 ## [TASK 4]: 15 points
 # finish the function position_birth_search
