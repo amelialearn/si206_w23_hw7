@@ -53,10 +53,16 @@ def make_positions_table(data, cur, conn):
 #     created for you -- see make_positions_table above for details.
 
 def make_players_table(data, cur, conn):
-    Players = []
-    conn = sqlite3.connect(data)
-    cur = conn.cursor()
-
+    for player in data["squad"]:
+        id = player["id"]
+        name = player["name"]
+        position = player["position"]
+        birthyear = player["dateOfBirth"][:4]
+        nationality = player["nationality"]
+        cur.execute("SELECT id FROM Positions WHERE position = ?", (position,))
+        position_id = cur.fetchone()[0]
+        cur.execute("CREATE TABLE IF NOT EXISTS Players (id INT PRIMARY KEY, name TEXT, position_id INT, birthyear INT, nationality TEXT)")
+        cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?, ?, ?, ?, ?)", (id, name, position_id, int(birthyear), nationality))
     conn.commit()
     cur.close()
 
