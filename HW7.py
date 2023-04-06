@@ -125,7 +125,7 @@ def birthyear_nationality_search(age, country, cur, conn):
     # and the database connection object. 
 
     # It selects all the players who play the position
-    #  passed to the function and
+    # passed to the function and
     # that were born AFTER (2023 minus the year passed)
     # for example: if we pass 19 for the year, it should return 
     # players with birth years AFTER 2004
@@ -134,8 +134,14 @@ def birthyear_nationality_search(age, country, cur, conn):
     # HINT: You'll have to use JOIN for this task.
 
 def position_birth_search(position, age, cur, conn):
-       pass
+    lst = []
+    name = cur.execute("SELECT name FROM Players WHERE position = ? AND birthyear > ?", (position, (2023 - age)))
+    birthyear = cur.execute("SELECT birthyear FROM Players WHERE position = ? AND birthyear > ?", (position, (2023 - age)))
+    tup = (name, position, birthyear)
+    lst.append(tup)
 
+    conn.commit()
+    cur.close()
 
 # [EXTRA CREDIT]
 # You’ll make 3 new functions, make_winners_table(), make_seasons_table(),
