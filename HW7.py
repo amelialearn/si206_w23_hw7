@@ -1,7 +1,7 @@
 
-# Your name:
-# Your student id:
-# Your email:
+# Your name: Amelia Learner
+# Your student id: 18812999
+# Your email: amelial@umich.edu
 # List who you have worked with on this project:
 
 import unittest
@@ -44,7 +44,7 @@ def make_positions_table(data, cur, conn):
 #     and loads them into a database table called 'Players'
 #     with the following columns:
 #         id ((datatype: int; Primary key) - note this comes from the JSON
-#         name (datatype: text)
+#         name (datatype: text)  
 #         position_id (datatype: integer)
 #         birthyear (datatype: int)
 #         nationality (datatype: text)
@@ -53,7 +53,12 @@ def make_positions_table(data, cur, conn):
 #     created for you -- see make_positions_table above for details.
 
 def make_players_table(data, cur, conn):
-    pass
+    Players = []
+    conn = sqlite3.connect(data)
+    cur = conn.cursor()
+
+    conn.commit()
+    cur.close()
 
 ## [TASK 2]: 10 points
 # Finish the function nationality_search
@@ -66,7 +71,15 @@ def make_players_table(data, cur, conn):
         # the player's name, their position_id, and their nationality.
 
 def nationality_search(countries, cur, conn):
-    pass
+    lst = []
+    conn = sqlite3.connect(countries)
+    cur = conn.cursor()
+    for row in cur:
+        cur.execute("SELECT players FROM countries")
+        tup = (name, position_id, nationality)
+        lst.append(tup)
+    conn.commit()
+    cur.close()
 
 ## [TASK 3]: 10 points
 # finish the function birthyear_nationality_search
