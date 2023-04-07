@@ -2,7 +2,7 @@
 # Your name: Amelia Learner
 # Your student id: 18812999
 # Your email: amelial@umich.edu
-# List who you have worked with on this project:
+# List who you have worked with on this project: Jackson Gelbard
 
 import unittest
 import sqlite3
@@ -79,10 +79,14 @@ def make_players_table(data, cur, conn):
         # the player's name, their position_id, and their nationality.
 
 def nationality_search(countries, cur, conn):
-    cur.execute("SELECT name, position_id, nationality FROM Players WHERE nationality IN ?", (countries))
-    lst = cur.fetchall()
+    lst = []
+    for country in countries:
+        cur.execute("SELECT name, position_id, nationality FROM Players WHERE nationality = ?", (country,))
+        players = cur.fetchall()
+        for player in players:
+            lst.append(player)
     conn.commit()
-    cur.close()
+    #doesn't work when I put close but doesn't it need to be closed??
     return lst
 
 ## [TASK 3]: 10 points
@@ -126,7 +130,8 @@ def birthyear_nationality_search(age, country, cur, conn):
     # HINT: You'll have to use JOIN for this task.
 
 def position_birth_search(position, age, cur, conn):
-    cur.execute("SELECT name, position, birthyear FROM Players WHERE nationality = ? AND birthyear < ?", (position, (2023 - age)))
+    #cur.execute("SELECT name, position, birthyear FROM Players WHERE nationality = ? AND birthyear < ?", (position, (2023 - age)))
+    cur.execute("SELECT Players.name, Players.birthyear, position.position FROM Players JOIN position ON Players.position_id = positions.id WHERE positions.name = ? AND players.birth_year > ?", (position, (2023 - age)))
     lst = cur.fetchall()
     conn.commit()
     cur.close()
