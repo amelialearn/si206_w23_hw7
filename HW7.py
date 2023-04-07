@@ -129,10 +129,9 @@ def birthyear_nationality_search(age, country, cur, conn):
     # HINT: You'll have to use JOIN for this task.
 
 def position_birth_search(position, age, cur, conn):
-    cur.execute("SELECT Players.name, Players.birthyear, Positions.position FROM Players JOIN Positions ON Players.position_id = Positions.id WHERE Positions.position = ? AND Players.birthyear > ?", (position, (2023 - age)))
+    cur.execute("SELECT Players.name, Positions.position, Players.birthyear FROM Players JOIN Positions ON Players.position_id = Positions.id WHERE Positions.position = ? AND Players.birthyear > ?", (position, (2023 - age)))
     lst = cur.fetchall()
     conn.commit()
-    cur.close()
     return lst
 
 # [EXTRA CREDIT]
@@ -212,7 +211,6 @@ class TestAllMethods(unittest.TestCase):
         self.assertEqual(y[0][1], 3)
 
     def test_birthyear_nationality_search(self):
-
         a = birthyear_nationality_search(24, 'England', self.cur, self.conn)
         self.assertEqual(len(a), 7)
         self.assertEqual(a[0][1], 'England')
