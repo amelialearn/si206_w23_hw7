@@ -77,13 +77,8 @@ def make_players_table(data, cur, conn):
         # the player's name, their position_id, and their nationality.
 
 def nationality_search(countries, cur, conn):
-    lst = []
-    for country in countries:
-        name = cur.execute("SELECT name FROM Players WHERE nationality = ?", (country))
-        position_id = cur.execute("SELECT position_id FROM Players WHERE nationality = ?", (country))
-        #nationality = cur.execute("SELECT nationality FROM Players")
-        tup = (name, position_id, country)
-        lst.append(tup)
+    cur.execute("SELECT name, position_id, nationality FROM Players WHERE nationality IN ?", (countries))
+    lst = cur.fetchall()
     conn.commit()
     cur.close()
     return lst
@@ -105,13 +100,8 @@ def nationality_search(countries, cur, conn):
 
 
 def birthyear_nationality_search(age, country, cur, conn):
-    lst = []
-    #players = cur.execute("SELECT name FROM Players WHERE nationality = ? AND birthyear < ?", (country, (2023 - age)))
-    name = cur.execute("SELECT name FROM Players WHERE nationality = ? AND birthyear < ?", (country, (2023 - age)))
-    birthyear = cur.execute("SELECT birthyear FROM Players WHERE nationality = ? AND birthyear < ?", (country, (2023 - age)))
-    tup = (name, country, birthyear)
-    lst.append(tup)
-
+    cur.execute("SELECT name, nationality, birthyear FROM Players WHERE nationality = ? AND birthyear < ?", (country, (2023 - age)))
+    lst = cur.fetchall()
     conn.commit()
     cur.close()
     return lst
