@@ -56,11 +56,13 @@ def make_players_table(data, cur, conn):
     for player in data["squad"]:
         id = player["id"]
         name = player["name"]
-        position = player["position"]
         birthyear = player["dateOfBirth"][:4]
         nationality = player["nationality"]
+
+        position = player["position"]
         cur.execute("SELECT id FROM Positions WHERE position = ?", (position,))
         position_id = cur.fetchone()[0]
+        
         cur.execute("CREATE TABLE IF NOT EXISTS Players (id INT PRIMARY KEY, name TEXT, position_id INT, birthyear INT, nationality TEXT)")
         cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?, ?, ?, ?, ?)", (id, name, position_id, int(birthyear), nationality))
     conn.commit()
@@ -124,14 +126,11 @@ def birthyear_nationality_search(age, country, cur, conn):
     # HINT: You'll have to use JOIN for this task.
 
 def position_birth_search(position, age, cur, conn):
-    lst = []
-    name = cur.execute("SELECT name FROM Players WHERE position = ? AND birthyear > ?", (position, (2023 - age)))
-    birthyear = cur.execute("SELECT birthyear FROM Players WHERE position = ? AND birthyear > ?", (position, (2023 - age)))
-    tup = (name, position, birthyear)
-    lst.append(tup)
-
+    cur.execute("SELECT name, position, birthyear FROM Players WHERE nationality = ? AND birthyear < ?", (position, (2023 - age)))
+    lst = cur.fetchall()
     conn.commit()
     cur.close()
+    return lst
 
 # [EXTRA CREDIT]
 # You’ll make 3 new functions, make_winners_table(), make_seasons_table(),
