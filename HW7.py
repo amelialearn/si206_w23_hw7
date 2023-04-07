@@ -104,7 +104,6 @@ def nationality_search(countries, cur, conn):
 #     This function returns a list of tuples each containing 
 #     the player’s name, nationality, and birth year. 
 
-
 def birthyear_nationality_search(age, country, cur, conn):
     cur.execute("SELECT name, nationality, birthyear FROM Players WHERE nationality = ? AND birthyear < ?", (country, (2023 - age)))
     lst = cur.fetchall()
@@ -130,8 +129,7 @@ def birthyear_nationality_search(age, country, cur, conn):
     # HINT: You'll have to use JOIN for this task.
 
 def position_birth_search(position, age, cur, conn):
-    #cur.execute("SELECT name, position, birthyear FROM Players WHERE nationality = ? AND birthyear < ?", (position, (2023 - age)))
-    cur.execute("SELECT Players.name, Players.birthyear, position.position FROM Players JOIN position ON Players.position_id = positions.id WHERE positions.name = ? AND players.birth_year > ?", (position, (2023 - age)))
+    cur.execute("SELECT Players.name, Players.birthyear, Positions.position FROM Players JOIN Positions ON Players.position_id = Positions.id WHERE Positions.position = ? AND Players.birthyear > ?", (position, (2023 - age)))
     lst = cur.fetchall()
     conn.commit()
     cur.close()
